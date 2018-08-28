@@ -42,7 +42,7 @@ public class SimpleSerializeProto {
 
         for (BeanFieldWithAnnotation field : fields) {
 
-            StreamingUtils.writeInt(field.getIndex(), outputStream); //字段索引
+            StreamingUtils.writeByte(field.getIndex(), outputStream); //字段索引 肯定大于 0
 
 
             Object value = field.getField().get(object);
@@ -163,7 +163,8 @@ public class SimpleSerializeProto {
 
         for (int i = 0; i < fieldCount; i++) {
 
-            int fieldIndex = StreamingUtils.readInt(inputStream);
+            int fieldIndex = StreamingUtils.readByte(inputStream); //字段索引，肯定大于零
+
             BeanFieldWithAnnotation xx = BeanFieldWithAnnotationUtils.getFieldTypeByIndex(fieldIndex, tClass);
 
             Class targetClass = xx.getType();
