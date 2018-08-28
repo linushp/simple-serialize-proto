@@ -57,7 +57,7 @@ public class PersonPo implements SimpleSerializable {
         SimpleSerializeProtoManager.addClass(100001, PersonPo.class);
 
 
-        byte[] bytes = new byte[]{3, 4};
+        byte[] bytes = new byte[]{3, 4,23,3,34,3,3,2,2,1,1,2,9,3};
 
         PersonPo personPo = new PersonPo();
         personPo.setName("goodnsdkjfndsjfjskdnfkj");
@@ -106,7 +106,7 @@ public class PersonPo implements SimpleSerializable {
             System.out.println(p2);
             System.out.println(t2-t1);
 
-            Thread.sleep(1000);
+//            Thread.sleep(1000);
         }
 
 
