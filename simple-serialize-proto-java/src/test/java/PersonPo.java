@@ -1,5 +1,6 @@
 import cn.ubibi.commons.ssp.SimpleSerializeProto;
 import cn.ubibi.commons.ssp.SimpleSerializeProtoManager;
+import cn.ubibi.commons.ssp.SimpleSerializeUtil;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializable;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializeField;
 
@@ -52,9 +53,10 @@ public class PersonPo implements SimpleSerializable {
 
     public static void main(String[] args) throws Exception {
 
+        SimpleSerializeUtil.addClass(100001, PersonPo.class);
 
 
-        SimpleSerializeProtoManager.addClass(100001, PersonPo.class);
+
 
 
         byte[] bytes = new byte[]{3, 4,23,3,34,3,3,2,2,1,1,2,9,3};
@@ -98,15 +100,15 @@ public class PersonPo implements SimpleSerializable {
         while (true){
 
             long t1 = System.currentTimeMillis();
-            byte[] byteArray = SimpleSerializeProto.toByteArray(personPo);
+            byte[] byteArray = SimpleSerializeUtil.toByteArray(personPo);
             System.out.println("length: " + byteArray.length);
 
-            Object p2 = SimpleSerializeProto.parseObject(byteArray);
+            Object p2 = SimpleSerializeUtil.parseObject(byteArray);
             long t2 = System.currentTimeMillis();
             System.out.println(p2);
             System.out.println(t2-t1);
 
-//            Thread.sleep(1000);
+            Thread.sleep(1000);
         }
 
 

@@ -13,6 +13,13 @@ import java.util.*;
 
 public class SimpleSerializeProto {
 
+    private SimpleSerializeProtoManager simpleSerializeProtoManager;
+
+    public SimpleSerializeProto(SimpleSerializeProtoManager simpleSerializeProtoManager) {
+        this.simpleSerializeProtoManager = simpleSerializeProtoManager;
+    }
+
+
 
     /**
      * 序列化一个对象
@@ -22,7 +29,7 @@ public class SimpleSerializeProto {
      * @return 二进制数据
      * @throws Exception
      */
-    public static byte[] toByteArray(Object object, int zipThreshold) throws Exception {
+    public byte[] toByteArray(Object object, int zipThreshold) throws Exception {
         byte[] bytes = toByteArrayImpl(object);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         if (bytes.length > zipThreshold) {
@@ -47,7 +54,7 @@ public class SimpleSerializeProto {
      * @return 二进制数据
      * @throws Exception
      */
-    public static byte[] toByteArray(Object object) throws Exception {
+    public byte[] toByteArray(Object object) throws Exception {
         return toByteArray(object, 1024 * 10); //数据大于10k启动gzip压缩
     }
 
@@ -59,7 +66,7 @@ public class SimpleSerializeProto {
      * @return 反序列化之后的对象
      * @throws Exception
      */
-    public static Object parseObject(byte[] originBytes) throws Exception {
+    public Object parseObject(byte[] originBytes) throws Exception {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(originBytes);
         boolean isZip = StreamingUtils.readTLBool(inputStream);
         byte[] bytes = StreamingUtils.readTLBytes(inputStream);
@@ -70,7 +77,7 @@ public class SimpleSerializeProto {
     }
 
 
-    private static byte[] toByteArrayImpl(Object object) throws Exception {
+    private byte[] toByteArrayImpl(Object object) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         if (object == null) {
@@ -81,7 +88,7 @@ public class SimpleSerializeProto {
         }
 
 
-        Integer classId = SimpleSerializeProtoManager.getClassId(object.getClass());
+        Integer classId = simpleSerializeProtoManager.getClassId(object.getClass());
         if (classId == null) {
             throw new Exception("classId is not exists : " + object.getClass().getName());
         }
@@ -186,7 +193,7 @@ public class SimpleSerializeProto {
     }
 
 
-    private static byte[] toByteArrayImpl(Collection subCollection) throws Exception {
+    private byte[] toByteArrayImpl(Collection subCollection) throws Exception {
         if (subCollection == null || subCollection.isEmpty()) {
             return new byte[]{};
         }
@@ -201,7 +208,7 @@ public class SimpleSerializeProto {
     }
 
 
-    private static <T> T parseObjectImpl(byte[] bytes) throws Exception {
+    private <T> T parseObjectImpl(byte[] bytes) throws Exception {
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         boolean isNull = StreamingUtils.readTLBool(inputStream); //是否为null
@@ -211,7 +218,7 @@ public class SimpleSerializeProto {
 
         int classId = StreamingUtils.readInt(inputStream);
 
-        Class tClass = SimpleSerializeProtoManager.getClassById(classId);
+        Class tClass = simpleSerializeProtoManager.getClassById(classId);
         Object objectInstance = tClass.newInstance();
 
 
@@ -281,7 +288,7 @@ public class SimpleSerializeProto {
     }
 
 
-    private static Map<String, Object> mapKeyValueListToMap(List mapKeyValueList) {
+    private Map<String, Object> mapKeyValueListToMap(List mapKeyValueList) {
         if (mapKeyValueList == null) {
             return null;
         }
@@ -295,7 +302,7 @@ public class SimpleSerializeProto {
     }
 
 
-    private static Object collectionTypeCast(List value, Class targetClass) {
+    private Object collectionTypeCast(List value, Class targetClass) {
         if (value == null) {
             return null;
         }
@@ -315,7 +322,7 @@ public class SimpleSerializeProto {
     }
 
 
-    private static List parseObjectList(int subElementCount, byte[] subBytes1) throws Exception {
+    private List parseObjectList(int subElementCount, byte[] subBytes1) throws Exception {
         if (subElementCount == 0) {
             return null;
         }
