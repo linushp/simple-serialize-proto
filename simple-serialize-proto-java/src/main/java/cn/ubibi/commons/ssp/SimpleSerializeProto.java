@@ -18,13 +18,13 @@ public class SimpleSerializeProto {
         byte[] bytes = toByteArrayImpl(object);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        if (bytes.length > 1024 * 10){ //数据大于10k启动gzip压缩
+        if (bytes.length > 1024 * 10) { //数据大于10k启动gzip压缩
             bytes = ZipUtils.gZip(bytes);
-            StreamingUtils.writeTLBool(true,outputStream);
-            StreamingUtils.writeTLBytes(bytes,outputStream);
-        }else {
-            StreamingUtils.writeTLBool(false,outputStream);
-            StreamingUtils.writeTLBytes(bytes,outputStream);
+            StreamingUtils.writeTLBool(true, outputStream);
+            StreamingUtils.writeTLBytes(bytes, outputStream);
+        } else {
+            StreamingUtils.writeTLBool(false, outputStream);
+            StreamingUtils.writeTLBytes(bytes, outputStream);
         }
 
         byte[] result = outputStream.toByteArray();
@@ -36,7 +36,7 @@ public class SimpleSerializeProto {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(originBytes);
         boolean isZip = StreamingUtils.readTLBool(inputStream);
         byte[] bytes = StreamingUtils.readTLBytes(inputStream);
-        if (isZip){
+        if (isZip) {
             bytes = ZipUtils.unGZip(bytes);
         }
         return parseObjectImpl(bytes);
