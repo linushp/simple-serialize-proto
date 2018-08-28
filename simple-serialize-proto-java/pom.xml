@@ -8,8 +8,6 @@
     <artifactId>simple-serialize-proto-java</artifactId>
     <version>1.0.1</version>
 
-
-
     <build>
         <plugins>
             <plugin>
