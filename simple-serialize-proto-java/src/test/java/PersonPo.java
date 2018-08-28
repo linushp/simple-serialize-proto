@@ -1,6 +1,8 @@
 import cn.ubibi.commons.ssp.SimpleSerializeProto;
+import cn.ubibi.commons.ssp.SimpleSerializeProtoManager;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializable;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializeField;
+import cn.ubibi.commons.ssp.mo.MapKeyValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,18 +17,18 @@ public class PersonPo implements SimpleSerializable {
     private String name = "hell0";
 
     @SimpleSerializeField(value = 2)
-    private int sex = 1;
+    private Integer sex = null;
 
     @SimpleSerializeField(value = 3)
     private long phone_number = 3223;
 
-    @SimpleSerializeField(value = 4 , elementClass = PersonPo.class)
+    @SimpleSerializeField(value = 4)
     private List<PersonPo> children = new ArrayList<>();
 
     @SimpleSerializeField(value = 5)
     private boolean isOK = false;
 
-    @SimpleSerializeField(value = 6, elementClass = PersonPo.class)
+    @SimpleSerializeField(value = 6)
     private Map<String, PersonPo> map = new HashMap<>();
 
     @SimpleSerializeField(value = 7)
@@ -37,28 +39,43 @@ public class PersonPo implements SimpleSerializable {
     }
 
 
+    public PersonPo(String name, Integer sex ,List children) {
+        this.name = name;
+        this.sex = sex;
+        this.children = children;
+    }
+
     public PersonPo(String name, int sex) {
         this.name = name;
         this.sex = sex;
+        this.children = new ArrayList<>();
     }
 
 
 
-    public static void main(String [] args) throws IOException, IllegalAccessException, InstantiationException {
+    public static void main(String [] args) throws Exception {
+        SimpleSerializeProtoManager.addClass(1, PersonPo.class);
+
+
+
+
         PersonPo personPo = new PersonPo();
         personPo.setName("goodnsdkjfndsjfjskdnfkj");
         personPo.setOK(true);
-        personPo.getChildren().add(new PersonPo("张三3",1821));
-        personPo.getChildren().add(new PersonPo("张sf三3",1213));
-        personPo.getChildren().add(new PersonPo("张sad三3",1251));
+        personPo.map.put("1111",new PersonPo(null,null,null));
+        personPo.map.put("1112",new PersonPo("s323unwu",5,null));
+        personPo.getChildren().add(new PersonPo("张三3",1821,null));
+        personPo.getChildren().add(new PersonPo("张sf三3",1213,null));
+        personPo.getChildren().add(new PersonPo("张sad三3",1251,null));
         personPo.getChildren().add(new PersonPo("张ds三3",126));
         personPo.getChildren().add(new PersonPo("张三cxs3",1291));
         personPo.getChildren().add(new PersonPo("张232三",1421));
+        personPo.setFather(new PersonPo("里斯",3200));
         byte[] byteArray = SimpleSerializeProto.toByteArray(personPo);
         System.out.println(byteArray);
 
 
-        PersonPo p2 = SimpleSerializeProto.parseObject(byteArray,PersonPo.class);
+        PersonPo p2 = SimpleSerializeProto.parseObject(byteArray);
         System.out.println(p2);
     }
 
@@ -112,6 +129,14 @@ public class PersonPo implements SimpleSerializable {
         this.father = father;
     }
 
+    public Map<String, PersonPo> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, PersonPo> map) {
+        this.map = map;
+    }
+
     @Override
     public String toString() {
         return "PersonPo{" +
@@ -121,8 +146,4 @@ public class PersonPo implements SimpleSerializable {
                 '}';
     }
 
-    @Override
-    public int getClassId() {
-        return 0;
-    }
 }
