@@ -5,6 +5,7 @@ import cn.ubibi.commons.ssp.annotation.BeanFieldWithAnnotationUtils;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializable;
 import cn.ubibi.commons.ssp.mo.MapKeyValue;
 import cn.ubibi.commons.ssp.utils.StreamingUtils;
+import cn.ubibi.commons.ssp.utils.ZipUtils;
 
 
 import java.io.ByteArrayInputStream;
@@ -13,8 +14,36 @@ import java.util.*;
 
 public class SimpleSerializeProto {
 
-
     public static byte[] toByteArray(Object object) throws Exception {
+        byte[] bytes = toByteArrayImpl(object);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        if (bytes.length > 1024 * 10){ //数据大于10k启动gzip压缩
+            bytes = ZipUtils.gZip(bytes);
+            StreamingUtils.writeTLBool(true,outputStream);
+            StreamingUtils.writeTLBytes(bytes,outputStream);
+        }else {
+            StreamingUtils.writeTLBool(false,outputStream);
+            StreamingUtils.writeTLBytes(bytes,outputStream);
+        }
+
+        byte[] result = outputStream.toByteArray();
+        outputStream.close();
+        return result;
+    }
+
+    public static <T> T parseObject(byte[] originBytes) throws Exception {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(originBytes);
+        boolean isZip = StreamingUtils.readTLBool(inputStream);
+        byte[] bytes = StreamingUtils.readTLBytes(inputStream);
+        if (isZip){
+            bytes = ZipUtils.unGZip(bytes);
+        }
+        return parseObjectImpl(bytes);
+    }
+
+
+    private static byte[] toByteArrayImpl(Object object) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         if (object == null) {
@@ -75,7 +104,7 @@ public class SimpleSerializeProto {
 
                 Collection subCollection = (Collection) value;
                 int elementCount = subCollection == null ? 0 : subCollection.size();
-                byte[] subBytes = toByteArray(subCollection);
+                byte[] subBytes = toByteArrayImpl(subCollection);
                 StreamingUtils.writeInt(elementCount, outputStream);
                 StreamingUtils.writeTLBytes(subBytes, outputStream);
 
@@ -84,13 +113,13 @@ public class SimpleSerializeProto {
                 Map subMap = (Map) value;
                 int elementCount = subMap == null ? 0 : subMap.size();
                 List<MapKeyValue> subKeyValueList = toMapKeyValueList(subMap);
-                byte[] subBytes = toByteArray(subKeyValueList);
+                byte[] subBytes = toByteArrayImpl(subKeyValueList);
 
                 StreamingUtils.writeInt(elementCount, outputStream);
                 StreamingUtils.writeTLBytes(subBytes, outputStream);
 
             } else if (SimpleSerializable.class.isAssignableFrom(fieldType)) {
-                byte[] subObjectBytes = toByteArray(value);
+                byte[] subObjectBytes = toByteArrayImpl(value);
                 StreamingUtils.writeTLBytes(subObjectBytes, outputStream);
             } else {
                 //未知类型的
@@ -130,13 +159,13 @@ public class SimpleSerializeProto {
     }
 
 
-    private static byte[] toByteArray(Collection subCollection) throws Exception {
+    private static byte[] toByteArrayImpl(Collection subCollection) throws Exception {
         if (subCollection == null || subCollection.isEmpty()) {
             return new byte[]{};
         }
         ByteArrayOutputStream subOutputStream = new ByteArrayOutputStream();
         for (Object subObject : subCollection) {
-            byte[] subBytes2 = toByteArray(subObject);
+            byte[] subBytes2 = toByteArrayImpl(subObject);
             StreamingUtils.writeTLBytes(subBytes2, subOutputStream);
         }
         byte[] subBytes1 = subOutputStream.toByteArray();
@@ -145,7 +174,7 @@ public class SimpleSerializeProto {
     }
 
 
-    public static <T> T parseObject(byte[] bytes) throws Exception {
+    private static <T> T parseObjectImpl(byte[] bytes) throws Exception {
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         boolean isNull = StreamingUtils.readTLBool(inputStream); //是否为null
@@ -210,7 +239,7 @@ public class SimpleSerializeProto {
 
             } else if (SimpleSerializable.class.isAssignableFrom(targetClass)) {
                 byte[] subBytes = StreamingUtils.readTLBytes(inputStream);
-                value = parseObject(subBytes);//classId
+                value = parseObjectImpl(subBytes);//classId
             } else {
                 //未知类型的
                 StreamingUtils.readInt(inputStream); //666666
@@ -268,7 +297,7 @@ public class SimpleSerializeProto {
         List subList = new ArrayList();
         for (int sss = 0; sss < subElementCount; sss++) {
             byte[] subBytes2 = StreamingUtils.readTLBytes(subByteArrayInputStream);
-            Object subObject = parseObject(subBytes2);
+            Object subObject = parseObjectImpl(subBytes2);
             subList.add(subObject);
         }
         subByteArrayInputStream.close();

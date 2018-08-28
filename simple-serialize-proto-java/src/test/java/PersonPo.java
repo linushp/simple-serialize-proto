@@ -2,9 +2,7 @@ import cn.ubibi.commons.ssp.SimpleSerializeProto;
 import cn.ubibi.commons.ssp.SimpleSerializeProtoManager;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializable;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializeField;
-import cn.ubibi.commons.ssp.mo.MapKeyValue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,9 +73,28 @@ public class PersonPo implements SimpleSerializable {
         personPo.getChildren().add(new PersonPo("张ds三3", 126));
         personPo.getChildren().add(new PersonPo("张三cxs3", 1291));
         personPo.getChildren().add(new PersonPo("张232三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张23的范德萨说收到粉丝的发生地2三", 1421));
+        personPo.getChildren().add(new PersonPo("张232三", 1421));
+        personPo.getChildren().add(new PersonPo("张232三", 1421));
         personPo.setFather(new PersonPo("里斯", 3200));
         byte[] byteArray = SimpleSerializeProto.toByteArray(personPo);
-        System.out.println(byteArray);
+        System.out.println("length: " + byteArray.length);
+
 
 
         PersonPo p2 = SimpleSerializeProto.parseObject(byteArray);
