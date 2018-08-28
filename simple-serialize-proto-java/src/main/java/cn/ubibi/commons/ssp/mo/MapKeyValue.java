@@ -22,8 +22,6 @@ public class MapKeyValue {
     }
 
 
-
-
     public String getKey() {
         return key;
     }

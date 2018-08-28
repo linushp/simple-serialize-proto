@@ -7,18 +7,25 @@ import cn.ubibi.commons.ssp.mo.MapKeyValue;
 import cn.ubibi.commons.ssp.utils.StreamingUtils;
 import cn.ubibi.commons.ssp.utils.ZipUtils;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 public class SimpleSerializeProto {
 
-    public static byte[] toByteArray(Object object) throws Exception {
-        byte[] bytes = toByteArrayImpl(object);
 
+    /**
+     * 序列化一个对象
+     *
+     * @param object       数据对象
+     * @param zipThreshold 数据大于此阀值将启动zip压缩
+     * @return 二进制数据
+     * @throws Exception
+     */
+    public static byte[] toByteArray(Object object, int zipThreshold) throws Exception {
+        byte[] bytes = toByteArrayImpl(object);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        if (bytes.length > 1024 * 10) { //数据大于10k启动gzip压缩
+        if (bytes.length > zipThreshold) {
             bytes = ZipUtils.gZip(bytes);
             StreamingUtils.writeTLBool(true, outputStream);
             StreamingUtils.writeTLBytes(bytes, outputStream);
@@ -32,7 +39,27 @@ public class SimpleSerializeProto {
         return result;
     }
 
-    public static <T> T parseObject(byte[] originBytes) throws Exception {
+
+    /**
+     * 序列化一个对象
+     *
+     * @param object 数据对象
+     * @return 二进制数据
+     * @throws Exception
+     */
+    public static byte[] toByteArray(Object object) throws Exception {
+        return toByteArray(object, 1024 * 10); //数据大于10k启动gzip压缩
+    }
+
+
+    /**
+     * 反序列化一个对象
+     *
+     * @param originBytes 二进制数据
+     * @return 反序列化之后的对象
+     * @throws Exception
+     */
+    public static Object parseObject(byte[] originBytes) throws Exception {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(originBytes);
         boolean isZip = StreamingUtils.readTLBool(inputStream);
         byte[] bytes = StreamingUtils.readTLBytes(inputStream);

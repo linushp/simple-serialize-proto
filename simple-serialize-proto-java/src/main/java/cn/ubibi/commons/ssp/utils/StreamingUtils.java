@@ -31,11 +31,13 @@ public class StreamingUtils {
      * @throws IOException
      */
     public static void writeByte(Byte v, OutputStream stream) throws IOException {
-        if (v == null){v = 0;}
+        if (v == null) {
+            v = 0;
+        }
         stream.write(v);
     }
 
-    public static byte readByte( InputStream stream) throws IOException {
+    public static byte readByte(InputStream stream) throws IOException {
         int a = stream.read();
         if (a < 0) {
             throw new IOException();
@@ -183,7 +185,7 @@ public class StreamingUtils {
      * @throws IOException
      */
     public static void writeTLString(String v, OutputStream stream) throws IOException {
-        if (v == null){
+        if (v == null) {
             v = "";
         }
         writeTLBytes(v.getBytes(StandardCharsets.UTF_8), stream);
@@ -371,7 +373,7 @@ public class StreamingUtils {
             throw new IOException();
         }
 
-        return (a << 24) + (b << 16) + (c << 8) + (d );
+        return (a << 24) + (b << 16) + (c << 8) + (d);
     }
 
     /**
@@ -417,7 +419,6 @@ public class StreamingUtils {
     public static String readTLString(InputStream stream) throws IOException {
         return new String(readTLBytes(stream), StandardCharsets.UTF_8);
     }
-
 
 
     /**
@@ -504,7 +505,6 @@ public class StreamingUtils {
     }
 
 
-
     /**
      * Converting int to bytes
      *
@@ -525,7 +525,7 @@ public class StreamingUtils {
                 (byte) ((value >> 16) & 0xFF),
                 (byte) ((value >> 8) & 0xFF),
                 (byte) (value & 0xFF),
-                };
+        };
     }
 
     /**

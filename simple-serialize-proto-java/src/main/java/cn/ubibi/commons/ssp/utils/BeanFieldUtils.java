@@ -1,9 +1,6 @@
 package cn.ubibi.commons.ssp.utils;
 
 
-import cn.ubibi.commons.ssp.annotation.SimpleSerializeField;
-
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -59,8 +56,6 @@ public class BeanFieldUtils {
         }
         return beanFields;
     }
-
-
 
 
     //过滤器

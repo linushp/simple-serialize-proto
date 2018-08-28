@@ -8,7 +8,7 @@ import java.util.*;
 public class BeanFieldWithAnnotationUtils {
 
     private static final Map<Class, List<BeanFieldWithAnnotation>> mapList = new HashMap<>();
-    private static final Map<Class, Map<Integer,BeanFieldWithAnnotation>> fieldIndexMap = new HashMap<>();
+    private static final Map<Class, Map<Integer, BeanFieldWithAnnotation>> fieldIndexMap = new HashMap<>();
 
 
     public static List<BeanFieldWithAnnotation> getBeanSimpleSerializeFields(Class clazz) {
@@ -47,9 +47,9 @@ public class BeanFieldWithAnnotationUtils {
 
     public static BeanFieldWithAnnotation getFieldTypeByIndex(Integer fieldIndex, Class tClass) {
         Map<Integer, BeanFieldWithAnnotation> fieldIndexMap2 = fieldIndexMap.get(tClass);
-        if (fieldIndexMap2 == null){
+        if (fieldIndexMap2 == null) {
             fieldIndexMap2 = getFieldIndexMap(tClass);
-            fieldIndexMap.put(tClass,fieldIndexMap2);
+            fieldIndexMap.put(tClass, fieldIndexMap2);
         }
         return fieldIndexMap2.get(fieldIndex);
     }
@@ -57,8 +57,8 @@ public class BeanFieldWithAnnotationUtils {
     private static Map<Integer, BeanFieldWithAnnotation> getFieldIndexMap(Class tClass) {
         Map<Integer, BeanFieldWithAnnotation> result = new HashMap<>();
         List<BeanFieldWithAnnotation> x = getBeanSimpleSerializeFields1(tClass, SimpleSerializeField.class);
-        for (BeanFieldWithAnnotation m:x){
-            result.put(m.getIndex(),m);
+        for (BeanFieldWithAnnotation m : x) {
+            result.put(m.getIndex(), m);
         }
         return result;
     }
