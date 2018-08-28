@@ -1,8 +1,5 @@
 package cn.ubibi.commons.ssp.utils;
 
-/**
- * Created by ex3ndr on 10.02.14.
- */
 public class TLBytes {
     private byte[] data;
     private int offset;
