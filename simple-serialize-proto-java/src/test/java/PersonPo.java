@@ -3,10 +3,7 @@ import cn.ubibi.commons.ssp.SimpleSerializeProtoManager;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializable;
 import cn.ubibi.commons.ssp.annotation.SimpleSerializeField;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class PersonPo implements SimpleSerializable {
@@ -54,6 +51,9 @@ public class PersonPo implements SimpleSerializable {
 
 
     public static void main(String[] args) throws Exception {
+
+
+
         SimpleSerializeProtoManager.addClass(100001, PersonPo.class);
 
 
@@ -92,13 +92,21 @@ public class PersonPo implements SimpleSerializable {
         personPo.getChildren().add(new PersonPo("张232三", 1421));
         personPo.getChildren().add(new PersonPo("张232三", 1421));
         personPo.setFather(new PersonPo("里斯", 3200));
+
+
+        long t1 = System.currentTimeMillis();
+
+
         byte[] byteArray = SimpleSerializeProto.toByteArray(personPo);
         System.out.println("length: " + byteArray.length);
 
 
 
         Object p2 = SimpleSerializeProto.parseObject(byteArray);
+
+        long t2 = System.currentTimeMillis();
         System.out.println(p2);
+        System.out.println(t2-t1);
     }
 
 
@@ -176,7 +184,11 @@ public class PersonPo implements SimpleSerializable {
                 "name='" + name + '\'' +
                 ", sex=" + sex +
                 ", phone_number=" + phone_number +
+                ", children=" + children +
+                ", isOK=" + isOK +
+                ", map=" + map +
+                ", father=" + father +
+                ", bytes=" + Arrays.toString(bytes) +
                 '}';
     }
-
 }
