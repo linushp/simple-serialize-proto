@@ -54,7 +54,7 @@ public class PersonPo implements SimpleSerializable {
 
 
     public static void main(String[] args) throws Exception {
-        SimpleSerializeProtoManager.addClass(1, PersonPo.class);
+        SimpleSerializeProtoManager.addClass(100001, PersonPo.class);
 
 
         byte[] bytes = new byte[]{3, 4};
@@ -97,7 +97,7 @@ public class PersonPo implements SimpleSerializable {
 
 
 
-        PersonPo p2 = SimpleSerializeProto.parseObject(byteArray);
+        Object p2 = SimpleSerializeProto.parseObject(byteArray);
         System.out.println(p2);
     }
 
