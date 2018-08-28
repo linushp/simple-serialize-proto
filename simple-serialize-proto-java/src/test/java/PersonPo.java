@@ -94,19 +94,23 @@ public class PersonPo implements SimpleSerializable {
         personPo.setFather(new PersonPo("里斯", 3200));
 
 
-        long t1 = System.currentTimeMillis();
+
+        while (true){
+
+            long t1 = System.currentTimeMillis();
+            byte[] byteArray = SimpleSerializeProto.toByteArray(personPo);
+            System.out.println("length: " + byteArray.length);
+
+            Object p2 = SimpleSerializeProto.parseObject(byteArray);
+            long t2 = System.currentTimeMillis();
+            System.out.println(p2);
+            System.out.println(t2-t1);
+
+            Thread.sleep(1000);
+        }
 
 
-        byte[] byteArray = SimpleSerializeProto.toByteArray(personPo);
-        System.out.println("length: " + byteArray.length);
 
-
-
-        Object p2 = SimpleSerializeProto.parseObject(byteArray);
-
-        long t2 = System.currentTimeMillis();
-        System.out.println(p2);
-        System.out.println(t2-t1);
     }
 
 
