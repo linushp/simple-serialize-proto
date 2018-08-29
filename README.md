@@ -38,20 +38,20 @@ public class PersonPo implements SimpleSerializable {
 序列化
 ```
  PersonPo personPo = new PersonPo();
- byte[] byteArray = SimpleSerializeProto.toByteArray(personPo);
+ byte[] byteArray = SimpleSerializeUtil.toByteArray(personPo);
 ```
 
 
 反序列化
 
 ```
-    PersonPo p2 = SimpleSerializeProto.parseObject(byteArray);
+    PersonPo p2 = SimpleSerializeUtil.parseObject(byteArray);
 ```
 
 
 注意,使用之前需要为Class分配一个ClassId
 ```
-  SimpleSerializeProtoManager.addClass(1, PersonPo.class);
+  SimpleSerializeUtil.addClass(1, PersonPo.class);
 ```
     
     
