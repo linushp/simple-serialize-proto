@@ -18,6 +18,8 @@ public class PersonPo implements SimpleSerializable {
     @SimpleSerializeField(value = 3)
     private long phone_number = 3223;
 
+
+
     @SimpleSerializeField(value = 4)
     private List<PersonPo> children;
 
